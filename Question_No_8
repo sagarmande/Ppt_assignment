@@ -1,0 +1,40 @@
+def findErrorNums(nums):
+    n = len(nums)
+    xorAll = 0
+    xorNums = 0
+
+    for i in range(1, n + 1):
+        xorAll ^= i
+
+    for num in nums:
+        xorNums ^= num
+
+    xorNums ^= xorAll
+
+    mask = 1
+    while xorNums & mask == 0:
+        mask <<= 1
+
+    missingNum = 0
+    duplicateNum = 0
+
+    for num in nums:
+        if num & mask == 0:
+            missingNum ^= num
+        else:
+            duplicateNum ^= num
+
+    for i in range(1, n + 1):
+        if i & mask == 0:
+            missingNum ^= i
+        else:
+            duplicateNum ^= i
+
+    for num in nums:
+        if num == missingNum:
+            return [duplicateNum, missingNum]
+
+    return [duplicateNum, missingNum]
+
+nums = [1, 2, 2, 4]
+print(findErrorNums(nums))
